@@ -1,4 +1,5 @@
 {
+  "use_proxy": true,
   "proxy": "http://127.0.0.1:7890",
   "register": {
     "sleep_min": 5,

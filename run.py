@@ -54,7 +54,8 @@ def log_result(email: str, success: bool, account_id: str = ""):
 
 def run_once(cfg: dict, tag: str = "") -> bool:
     """注册一个账号并保存 Token"""
-    proxy = cfg.get("proxy")
+    use_proxy = cfg.get("use_proxy", True)
+    proxy = cfg.get("proxy") if use_proxy else None
     token_json = register_run(proxy)
 
     if not token_json:
@@ -92,7 +93,9 @@ def main():
     parallel = max(1, args.parallel)
 
     print(f"[Info] OpenAI 自动注册工具")
-    print(f"[Info] 代理: {cfg.get('proxy', '无')}")
+    use_proxy = cfg.get("use_proxy", True)
+    proxy_info = cfg.get("proxy", "无") if use_proxy else "disabled"
+    print(f"[Info] 代理: {proxy_info}")
     print(f"[Info] 目标: {'无限循环' if target == 0 else f'{target} 个'}")
     print(f"[Info] 并行: {parallel} 线程")
     print()
