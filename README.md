@@ -82,7 +82,7 @@ python3 register.py --once --proxy http://127.0.0.1:7890
 
 ```json
 {
-  "use_proxy": true,
+  "use_proxy": false,
   "proxy": "http://127.0.0.1:7890",
   "register": {
     "sleep_min": 5,
@@ -93,7 +93,7 @@ python3 register.py --once --proxy http://127.0.0.1:7890
 
 | 字段 | 说明 |
 |------|------|
-| `use_proxy` | 是否启用代理，`false` 时直连 |
+| `use_proxy` | 是否启用代理，默认 `false`，即不走代理 |
 | `proxy` | HTTP 代理地址 |
 | `register.sleep_min` | 两次注册之间最短等待秒数 |
 | `register.sleep_max` | 两次注册之间最长等待秒数 |
