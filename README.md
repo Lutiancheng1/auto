@@ -67,14 +67,15 @@ python3 register.py --once --proxy http://127.0.0.1:7890
 
 ## 文件说明
 
-| 文件 | 说明 |
-|------|------|
-| `register.py` | 核心注册逻辑，可独立运行 |
-| `run.py` | 批量/并行运行脚本，读取 config.json |
-| `config.json.example` | 配置文件模板，复制为 config.json 后使用 |
-| `requirements.txt` | Python 依赖列表 |
-| `tokens/` | 注册成功的 Token 存放目录（自动创建） |
-| `history.log` | 注册历史日志（自动创建） |
+| 文件                    | 说明                                                |
+| ----------------------- | --------------------------------------------------- |
+| `register.py`           | 核心注册逻辑，可独立运行                            |
+| `run.py`                | 批量/并行运行脚本，读取 config.json                 |
+| `auto_import_tokens.py` | Token 自动搬运脚本，循环监听并将新 Token 导入代理池 |
+| `config.json.example`   | 配置文件模板，复制为 config.json 后使用             |
+| `requirements.txt`      | Python 依赖列表                                     |
+| `tokens/`               | 注册成功的 Token 存放目录（自动创建）               |
+| `history.log`           | 注册历史日志（自动创建）                            |
 
 ---
 
@@ -91,12 +92,12 @@ python3 register.py --once --proxy http://127.0.0.1:7890
 }
 ```
 
-| 字段 | 说明 |
-|------|------|
-| `use_proxy` | 是否启用代理，默认 `false`，即不走代理 |
-| `proxy` | HTTP 代理地址 |
-| `register.sleep_min` | 两次注册之间最短等待秒数 |
-| `register.sleep_max` | 两次注册之间最长等待秒数 |
+| 字段                 | 说明                                   |
+| -------------------- | -------------------------------------- |
+| `use_proxy`          | 是否启用代理，默认 `false`，即不走代理 |
+| `proxy`              | HTTP 代理地址                          |
+| `register.sleep_min` | 两次注册之间最短等待秒数               |
+| `register.sleep_max` | 两次注册之间最长等待秒数               |
 
 ---
 
@@ -137,3 +138,21 @@ python3 register.py --once --proxy http://127.0.0.1:7890
   "expired": "2025-01-02T00:00:00Z"
 }
 ```
+
+---
+
+## 下游服务整合 (自动导入 Token)
+
+配合本地的代理池服务（如 `CLIProxyAPI`），项目中包含了一个 `auto_import_tokens.py` 脚本：
+
+```bash
+# 后台启动或在一个新的终端窗口中运行
+python3 auto_import_tokens.py
+```
+
+### 作用机制：
+
+
+1. 它会启动一个无限循环，每 **30 秒**扫描一次本地的 `tokens/` 目录。
+2. 寻找以 `token_` 开头的 `.json` 凭证文件。
+3. 如果在目标代理池目录（默认配置为 `~/cli-proxy/auths`，可根据需要修改脚本内的 `DEST_DIR`）中不存在该文件，则自动复制过去，实现无缝衔接的账号轮换和补充。
