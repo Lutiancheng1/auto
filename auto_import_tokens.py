@@ -32,7 +32,7 @@ def main():
         except Exception as e:
             print(f"[Error] 自动导入时发生错误: {e}")
             
-        time.sleep(1800) # 每 30 分钟检查一次
+        time.sleep(300) # 每 5 分钟检查一次
 
 if __name__ == "__main__":
     main()
