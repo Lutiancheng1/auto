@@ -524,6 +524,9 @@ def run(proxy: Optional[str]) -> Optional[str]:
             data=signup_body,
         )
         print(f"[*] 提交注册表单状态: {signup_resp.status_code}")
+        if signup_resp.status_code != 200:
+            print(f"[Error] 提交注册表单被拒绝 (状态码: {signup_resp.status_code})，停止由于风控导致的无意义验证码死等。")
+            return None
 
         otp_resp = s.post(
             "https://auth.openai.com/api/accounts/passwordless/send-otp",
@@ -534,6 +537,9 @@ def run(proxy: Optional[str]) -> Optional[str]:
             },
         )
         print(f"[*] 验证码发送状态: {otp_resp.status_code}")
+        if otp_resp.status_code != 200:
+            print(f"[Error] 发送验证码被拒绝 (状态码: {otp_resp.status_code})，跳过轮询。")
+            return None
 
         code = get_oai_code(dev_token, email, proxies)
         if not code:
