@@ -26,8 +26,9 @@ git clone <this-repo>
 cd openai-auto-register
 
 # 创建虚拟环境（推荐）
-python3 -m venv venv
-source venv/bin/activate   # Windows: venv\Scripts\activate
+python3 -m venv .venv
+.\.venv\Scripts\activate   # Windows PowerShell
+source .venv/bin/activate  # Linux/macOS/Git Bash
 
 # 安装依赖
 pip install -r requirements.txt
@@ -53,8 +54,11 @@ python3 run.py --count 5
 # 3 线程并行，注册 10 个
 python3 run.py --count 10 --parallel 3
 
-# 无限循环注册
+# 无限循环注册（单线程）
 python3 run.py
+
+# 无限循环注册（多线程并行，例如 3 线程）
+python3 run.py --parallel 3
 ```
 
 ### 直接使用 register.py（单次测试）
