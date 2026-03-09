@@ -2,8 +2,8 @@ import os
 import time
 import shutil
 
-SOURCE_DIR = "/opt/auto/tokens"
-DEST_DIR = "/opt/cliproxyapi/auths"
+SOURCE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "tokens")
+DEST_DIR = os.path.expanduser("~/cli-proxy/auths")
 
 def main():
     print(f"[*] 启动自动导入脚本...")
